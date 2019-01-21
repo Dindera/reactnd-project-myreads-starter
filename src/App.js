@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import SearchComponent from './Components/SearchComponent'
 
 
+
 class App extends React.Component {
  state = {
     /**
@@ -19,7 +20,8 @@ class App extends React.Component {
      */
    
       books: [],
-      
+      query: '',
+      searchResult: [],
   }
 
  //get data from server 
@@ -54,8 +56,33 @@ BooksAPI.update(book, shelf).then(()=> {
     }))
   }
 })
+}
 
-  }
+postQuery = (query) => {
+
+  BooksAPI.search(query).then(searchResult => {
+    if(query === ''|| searchResult.error){
+      this.setState((currState) => ({
+        query,
+        searchResult: [],
+      }))
+    }
+    else if(query !== '' && searchResult !== []){
+      this.setState((currState) => ({
+        query,
+        searchResult
+      }))
+    }
+    else if(searchResult === []){
+      this.setState((currState) => ({
+        searchResult: this.state.books,
+      }))
+    }
+  })
+}
+
+
+
 
 // check value of shelf when changed and update state
 shelf_status = (book, e) => {
@@ -70,7 +97,7 @@ shelf_status = (book, e) => {
       <div className="app">
       <Route path="/search" render={() => (
         // add props and state to  update server/state while on search route
-        <SearchComponent books={this.state.books} onMoveBooks={this.shelf_status}/>
+      <SearchComponent  searchResult={this.state.searchResult} onQuery={this.postQuery} onMoveBooks={this.shelf_status}/>
       )}/>
       <Route exact path="/" render={() => (
           <div className="list-books">
@@ -103,7 +130,6 @@ shelf_status = (book, e) => {
           </div>
         </div>
       )}/>
-
       </div>
     )
   }

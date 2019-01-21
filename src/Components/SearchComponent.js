@@ -4,30 +4,30 @@ import PropTypes from 'prop-types';
 
 class SearchComponent extends Component {
    static propTypes = {
-      books:  PropTypes.array.isRequired,
+      searchResult: PropTypes.array.isRequired,
       onMoveBooks: PropTypes.func.isRequired,
+      onQuery: PropTypes.func.isRequired,
+      
    }
 
    state = {
-       query: ''
+     query: this.props.query
    }
 
-   showResults = (query) => {
-       this.setState(() => ({
-           query: query.trim()
-       }))
+   handleSearchQuery = (query) => {
+    if(this.props.onQuery){
+      this.props.onQuery(query)
+        // console.log(query);
+    }
    }
 
-   clearResults = (query) => {
-    this.showResults('')
-   }
 
 render() {
     const { query } = this.state
-    const showingBooks = query === '' ? this.props.books : this.props.books.filter(b =>
-      (b.title.toLowerCase().includes(query.toLowerCase())) || (b.authors[0].toLowerCase().includes(query.toLowerCase())))
+    const {searchResult = [], onMoveBooks} = this.props
     
-    return(
+    
+    return (
     <div className="search-books">
     <div className="search-books-bar">
       <Link className="close-search" to="/">Close</Link>
@@ -40,30 +40,23 @@ render() {
           However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
           you don't find a specific author or title. Every search is limited by search terms.
         */}
+       
         <input 
         type="text" 
         placeholder="Search by title or author"
-        value={this.state.query}
-        onChange={event => this.showResults(event.target.value)}/>
+        value={query}
+        onChange={(e) => this.handleSearchQuery(e.target.value)}/>
       </div>
     </div>
-
     <div className="search-books-results">
-     {showingBooks.length !== this.props.books.length && (
-       <div className="showing-books">
-         <span>Now showing {showingBooks.length} of {this.props.books.length}</span>     
-          <button onClick={this.clearResults} >Show all</button>
-       </div>
-     )}
     <ol className="books-grid">
-    {showingBooks.map((book) => (
-   
-        <li key={book.id}>
+      {(searchResult.length === 0) ?  '' : searchResult.map((book) => 
+                <li key={book.id}>
                 <div className="book">
                   <div className="book-top">
-                    <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.thumbnail})`}}></div>
+                    <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks ? book.imageLinks.thumbnail : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRESpexpHi4QB2AF-vMVmCaLfqdEDNABdxyn4eefa7rf5UwAf6xoA'})`}}></div>
                     <div className="book-shelf-changer">
-                    <select  onChange={(e) => this.props.onMoveBooks(book, e)} defaultValue={book.shelf}>
+                    <select  onChange={(e) => onMoveBooks(book, e)}  defaultValue={book.shelf}>
                       <option  value="move" disabled>Move to...</option>
                       <option  value="currentlyReading">Currently Reading</option>
                       <option  value="wantToRead">Want to Read</option>
@@ -76,8 +69,7 @@ render() {
                   <div className="book-authors">{book.authors}</div>
                 </div>
               </li>
-
-  ))}
+              )}
   </ol>
   </div>
   
