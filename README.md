@@ -70,10 +70,6 @@ update(book, shelf)
 
 Method Signature:
 
-```js
-search(query)
-```
-
 * query: `<String>`
 * Returns a Promise which resolves to a JSON object containing a collection of a maximum of 20 book objects.
 * These books do not know which shelf they are on. They are raw results only. You'll need to make sure that books have the correct state while on the search page.
@@ -90,3 +86,15 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 This repository is the starter code for _all_ Udacity students. Therefore, we most likely will not accept pull requests.
 
 For details, check out [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## About MyReads 
+
+This Project is a Book Tracking application that basically has a main page with three shelf's namely Currently Reading, Want to Read and Read. The books can be moved from one shelf to another using the select button. New Books can be added into the shelf using the search component. All the books are gotten from a BooksAPI.  
+
+## Installing and Launching
+
+To install and launch MyReads
+
+* Clone or fork the repository
+* Run npm install 
+* Run npm start and make sure you are connected to the internet
