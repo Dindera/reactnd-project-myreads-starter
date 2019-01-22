@@ -14,10 +14,26 @@ class SearchComponent extends Component {
      query: this.props.query
    }
 
+   _isMounted = false
+
+   componentWillMount(){
+    this._isMounted = true
+   }
+   componentWillUnmount(){
+    this._isMounted = false
+  }
+
+  handleClick = () => {
+   if(this._isMounted){
+    this.props.searchResult = []
+   }
+  }
+
+
    handleSearchQuery = (query) => {
     if(this.props.onQuery){
       this.props.onQuery(query)
-        // console.log(query);
+       
     }
    }
 
@@ -30,7 +46,7 @@ render() {
     return (
     <div className="search-books">
     <div className="search-books-bar">
-      <Link className="close-search" to="/">Close</Link>
+      <Link className="close-search" to="/" onClick={this.handleClick}>Close</Link>
       <div className="search-books-input-wrapper">
         {/*
           NOTES: The search from BooksAPI is limited to a particular set of search terms.
