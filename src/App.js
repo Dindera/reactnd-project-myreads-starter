@@ -44,10 +44,10 @@ BooksAPI.update(book, shelf).then(()=> {
 
   if(shelf === 'none'){
     updated_books = bookArray
-    console.log(shelf)
+    
   }else {
     updated_books = bookArray.concat(book)
-    console.log(shelf)
+    
   }
 // update state
   if(updated_books){
