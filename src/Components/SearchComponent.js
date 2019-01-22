@@ -11,29 +11,18 @@ class SearchComponent extends Component {
    }
 
    state = {
-     query: this.props.query
+     query: this.props.query,
+     search: this.props.searchResult
+   
    }
 
-   _isMounted = false
-
-   componentWillMount(){
-    this._isMounted = true
-   }
    componentWillUnmount(){
-    this._isMounted = false
+      this.handleSearchQuery('')
   }
-
-  handleClick = () => {
-   if(this._isMounted){
-    this.props.searchResult = []
-   }
-  }
-
 
    handleSearchQuery = (query) => {
     if(this.props.onQuery){
       this.props.onQuery(query)
-       
     }
    }
 
@@ -46,7 +35,7 @@ render() {
     return (
     <div className="search-books">
     <div className="search-books-bar">
-      <Link className="close-search" to="/" onClick={this.handleClick}>Close</Link>
+      <Link className="close-search" to="/">Close</Link>
       <div className="search-books-input-wrapper">
         {/*
           NOTES: The search from BooksAPI is limited to a particular set of search terms.
@@ -72,7 +61,7 @@ render() {
                   <div className="book-top">
                     <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks ? book.imageLinks.thumbnail : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRESpexpHi4QB2AF-vMVmCaLfqdEDNABdxyn4eefa7rf5UwAf6xoA'})`}}></div>
                     <div className="book-shelf-changer">
-                    <select  onChange={(e) => onMoveBooks(book, e)}  defaultValue={book.shelf}>
+                    <select  onChange={(e) => onMoveBooks(book, e)}  defaultValue={'none'}>
                       <option  value="move" disabled>Move to...</option>
                       <option  value="currentlyReading">Currently Reading</option>
                       <option  value="wantToRead">Want to Read</option>
